@@ -1,7 +1,9 @@
 package src;
 
 public abstract class Player {
+
     protected String name;
+    protected int guess;
     protected int[] guesses;
     protected int guessCount;
 
@@ -11,7 +13,9 @@ public abstract class Player {
         this.guessCount = 0;
     }
 
-    public abstract int makeGuess();
+    public int makeGuess(){
+        return guess;
+    };
 
     public String getName() {
         return name;

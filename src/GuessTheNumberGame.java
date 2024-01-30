@@ -1,4 +1,3 @@
-
 package src;
 
 import java.util.Random;
@@ -10,13 +9,22 @@ public class GuessTheNumberGame {
     private Player currentPlayer;
     private Player otherPlayer;
 
+    public int lowerBound = 1;
+    public int upperBound = 100;
+
     public GuessTheNumberGame() {
         random = new Random();
         targetNumber = random.nextInt(100) + 1;
     }
 
+    public int getTargetNumber() {
+        return targetNumber;
+    }
+
     public void play() {
-        System.out.println("Welcome to Guess The Number Game!");
+        System.out.println("**************************************");
+        System.out.println("🎮 Welcome to Guess The Number Game! 🎮");
+        System.out.println("**************************************");
 
         // Prompt the user to enter their name
         Scanner scanner = new Scanner(System.in);
@@ -25,7 +33,7 @@ public class GuessTheNumberGame {
 
         // Create instances of HumanPlayer and ComputerPlayer with the provided names
         HumanPlayer humanPlayer = new HumanPlayer(playerName);
-        ComputerPlayer computerPlayer = new ComputerPlayer("Computer");
+        ComputerPlayer computerPlayer = new ComputerPlayer("Computer", this);
 
         // Assign players to currentPlayer and otherPlayer
         currentPlayer = humanPlayer;
@@ -59,9 +67,8 @@ public class GuessTheNumberGame {
     }
 
     private void displayWinner() {
-        System.out.println(currentPlayer.getName() + "🎉 is the winner!😁");
+        System.out.println(currentPlayer.getName() + " 🎉 is the winner! 😁");
         System.out.println("Guesses: " + currentPlayer.getGuesses());
-
     }
 
     public static void main(String[] args) {
