@@ -1,5 +1,3 @@
-package src;
-
 import java.util.Random;
 import java.util.Scanner;
 
@@ -69,10 +67,5 @@ public class GuessTheNumberGame {
     private void displayWinner() {
         System.out.println(currentPlayer.getName() + " 🎉 is the winner! 😁");
         System.out.println("Guesses: " + currentPlayer.getGuesses());
-    }
-
-    public static void main(String[] args) {
-        GuessTheNumberGame game = new GuessTheNumberGame();
-        game.play();
     }
 }
