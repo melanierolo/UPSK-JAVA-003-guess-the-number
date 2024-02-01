@@ -38,10 +38,8 @@ public class GuessTheNumberGame {
         otherPlayer = computerPlayer;
 
         while (true) {
-            int guess = currentPlayer.makeGuess();
-            checkGuess(guess);
 
-            if (guess == targetNumber) {
+            if (checkGuess(currentPlayer)) {
                 displayWinner();
                 break;
             }
@@ -53,15 +51,28 @@ public class GuessTheNumberGame {
         }
     }
 
-    private void checkGuess(int guess) {
+    /**
+     * Verifies the guess made by the current player.
+     *
+     * @param player The Player object representing the current player making the guess.
+     * Also,the parameter (Player player) indicates that the method expects an object of type "Player"
+     * @return true if the guess is correct, false otherwise.
+     */
+
+    private boolean checkGuess(Player player) {
+        int guess = player.makeGuess();
+        boolean result = false;
+
         if (guess < targetNumber) {
             System.out.println(currentPlayer.getName() + "'s guess is too low.↘️");
         } else if (guess > targetNumber) {
             System.out.println(currentPlayer.getName() + "'s guess is too high.↗️");
         } else {
             System.out.println(currentPlayer.getName() + " guessed the correct number!");
+            result = true;
         }
         System.out.println("----------------------------------------------");
+        return result;
     }
 
     private void displayWinner() {
