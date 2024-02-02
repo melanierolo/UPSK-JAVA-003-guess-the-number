@@ -24,10 +24,7 @@ public class GuessTheNumberGame {
         System.out.println("🎮 Welcome to Guess The Number Game! 🎮");
         System.out.println("**************************************");
 
-        // Prompt the user to enter their name
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter your name:");
-        String playerName = scanner.nextLine();
+        String playerName = getPlayerName();
 
         // Create instances of HumanPlayer and ComputerPlayer with the provided names
         HumanPlayer humanPlayer = new HumanPlayer(playerName);
@@ -53,12 +50,16 @@ public class GuessTheNumberGame {
 
     /**
      * Verifies the guess made by the current player.
-     *
-     * @param player The Player object representing the current player making the guess.
+     * @param - object representing the current player making the guess.
      * Also,the parameter (Player player) indicates that the method expects an object of type "Player"
      * @return true if the guess is correct, false otherwise.
      */
 
+    private String getPlayerName() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter your name:");
+        return scanner.nextLine();
+    }
     private boolean checkGuess(Player player) {
         int guess = player.makeGuess();
         boolean result = false;
@@ -79,4 +80,5 @@ public class GuessTheNumberGame {
         System.out.println(currentPlayer.getName() + " 🎉 is the winner! 😁");
         System.out.println("Guesses: " + currentPlayer.getGuesses());
     }
+
 }
