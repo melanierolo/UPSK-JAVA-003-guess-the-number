@@ -13,13 +13,12 @@ public class ComputerPlayer extends Player {
     @Override
     public int makeGuess() {
         int guess = divideAndConquer(game.lowerBound, game.upperBound);
-        System.out.println(name + " guessed: " + guess);
+        System.out.println(getName() + " guessed: " + guess);
         guesses[guessCount++] = guess;
         return guess;
     }
 
     private int divideAndConquer(int lower, int upper) {
-
         int mid = (lower + upper) / 2;
         if (mid == game.getTargetNumber()) {
             System.out.println("Correct number! ✅");
@@ -30,9 +29,5 @@ public class ComputerPlayer extends Player {
         }
 
         return mid;
-    }
-
-    public int getGuessCount() {
-        return guessCount;
     }
 }

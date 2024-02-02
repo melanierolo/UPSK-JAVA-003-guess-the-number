@@ -10,13 +10,9 @@ public class HumanPlayer extends Player {
 
     @Override
     public int makeGuess() {
-        System.out.println(name + ", enter your guess between 1 and 100:");
+        System.out.println(getName() + ", enter your guess between 1 and 100:");
         int guess = scanner.nextInt();
         guesses[guessCount++] = guess;
         return guess;
-    }
-
-    public int getGuessCount() {
-        return guessCount;
     }
 }

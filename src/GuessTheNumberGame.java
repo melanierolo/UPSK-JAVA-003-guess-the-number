@@ -1,5 +1,7 @@
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class GuessTheNumberGame {
     private Random random;
@@ -48,18 +50,18 @@ public class GuessTheNumberGame {
         }
     }
 
+    private String getPlayerName() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter your name:");
+        return scanner.nextLine();
+    }
+
     /**
      * Verifies the guess made by the current player.
      * @param - object representing the current player making the guess.
      * Also,the parameter (Player player) indicates that the method expects an object of type "Player"
      * @return true if the guess is correct, false otherwise.
      */
-
-    private String getPlayerName() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter your name:");
-        return scanner.nextLine();
-    }
     private boolean checkGuess(Player player) {
         int guess = player.makeGuess();
         boolean result = false;
@@ -78,7 +80,10 @@ public class GuessTheNumberGame {
 
     private void displayWinner() {
         System.out.println(currentPlayer.getName() + " 🎉 is the winner! 😁");
-        System.out.println("Guesses: " + currentPlayer.getGuesses());
+        String guessesAsString = Arrays.stream(currentPlayer.getGuesses())
+                .mapToObj(String::valueOf)
+                .collect(Collectors.joining(", "));
+        System.out.println("Guesses: " + guessesAsString);
     }
 
 }
