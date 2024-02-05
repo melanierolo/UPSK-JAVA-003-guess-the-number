@@ -1,14 +1,11 @@
-import org.junit.jupiter.api.AfterEach; // Import the AfterEach annotation
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
+import java.io.ByteArrayInputStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -22,10 +19,10 @@ public class GuessTheNumberGameTest {
     void setUp() {
         game = new GuessTheNumberGame();
 
-        // Mock a player and set it as the currentPlayer using reflection
+        // Mock a player
         Player currentPlayer = mock(Player.class);
         when(currentPlayer.getName()).thenReturn("Elena");
-        setPrivateField(game, "currentPlayer", currentPlayer);
+        game.currentPlayer = currentPlayer; // Assign currentPlayer directly
     }
 
     @Test
@@ -40,78 +37,35 @@ public class GuessTheNumberGameTest {
     }
 
     @Test
-    public void testGetPlayerName() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void testGetPlayerName() {
         // Prepare
         String playerName = "John";
+        // Mock user input
+        provideMockedUserInput(playerName);
 
         // Act
-        String actualName = invokeGetPlayerNameWithInput(playerName);
+        String actualName = game.getPlayerName();
 
         // Assert
         assertEquals(playerName, actualName);
     }
 
-    // Helper method to invoke getPlayerName method with given input
-    private String invokeGetPlayerNameWithInput(String playerName) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        try (InputStream mockedInput = new ByteArrayInputStream(playerName.getBytes())) {
-            // Redirect System.in to the mockedInput stream
-            System.setIn(mockedInput);
-
-            // Obtain the method getPlayerName via reflection
-            Method getPlayerNameMethod = GuessTheNumberGame.class.getDeclaredMethod("getPlayerName");
-            getPlayerNameMethod.setAccessible(true);
-
-            // Create a new instance of GuessTheNumberGame
-            GuessTheNumberGame game = new GuessTheNumberGame();
-
-            // Invoke the getPlayerName method
-            return (String) getPlayerNameMethod.invoke(game);
-        } catch (IOException e) {
-            // Suppress IOException since ByteArrayInputStream's close method rarely throws an exception
-            return null;
-        } finally {
-            // Restore the original System.in
-            System.setIn(System.in);
-        }
+    // Helper method to mock user input
+    private void provideMockedUserInput(String playerName) {
+        InputStream mockedInput = new ByteArrayInputStream(playerName.getBytes());
+        System.setIn(mockedInput);
     }
 
     @Test
-    void testCheckGuessWithReflection() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException {
-        // Access the private targetNumber field using reflection
-        Field targetNumberField = GuessTheNumberGame.class.getDeclaredField("targetNumber");
-        targetNumberField.setAccessible(true);
-
-        // Set the value of the targetNumber field
-        targetNumberField.setInt(game, 42);
-
+    void testCheckGuess() {
         // Create a mock player
         Player player = new Player("Elena") {
             @Override
             public int makeGuess() {
-                return 42; // Mock guess is 42
+                return game.getTargetNumber(); // Mock guess is the target number
             }
         };
-
-        // Access the private checkGuess method using reflection
-        Method checkGuessMethod = GuessTheNumberGame.class.getDeclaredMethod("checkGuess", Player.class);
-        checkGuessMethod.setAccessible(true);
-
-        // Call the private method with the mock player
-        boolean result = (boolean) checkGuessMethod.invoke(game, player);
-
-        // Assert the result
-        assertTrue(result);
-    }
-
-    // Helper method to set the value of a private field using reflection
-    private void setPrivateField(Object object, String fieldName, Object value) {
-        try {
-            Field field = object.getClass().getDeclaredField(fieldName);
-            field.setAccessible(true);
-            field.set(object, value);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace(); // Handle exception properly in your code
-        }
+        assertTrue(game.checkGuess(player));
     }
 
     // @AfterEach method to clean up after each test

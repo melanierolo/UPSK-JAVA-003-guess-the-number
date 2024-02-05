@@ -4,13 +4,13 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class GuessTheNumberGame {
-    private Random random;
-    private int targetNumber;
-    private Player currentPlayer;
-    private Player otherPlayer;
+    Random random;
+    protected int targetNumber;
+    protected Player currentPlayer;
+    protected Player otherPlayer;
 
-    public int lowerBound = 1;
-    public int upperBound = 100;
+    protected int lowerBound = 1;
+    protected int upperBound = 100;
 
     public GuessTheNumberGame() {
         random = new Random();
@@ -50,7 +50,7 @@ public class GuessTheNumberGame {
         }
     }
 
-    private String getPlayerName() {
+    public String getPlayerName() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter your name:");
         return scanner.nextLine();
@@ -62,28 +62,28 @@ public class GuessTheNumberGame {
      * Also,the parameter (Player player) indicates that the method expects an object of type "Player"
      * @return true if the guess is correct, false otherwise.
      */
-    private boolean checkGuess(Player player) {
+     public boolean checkGuess(Player player) {
         int guess = player.makeGuess();
         boolean result = false;
 
-        if (guess < targetNumber) {
-            System.out.println(currentPlayer.getName() + "'s guess is too low.↘️");
-        } else if (guess > targetNumber) {
-            System.out.println(currentPlayer.getName() + "'s guess is too high.↗️");
-        } else {
+        if (guess == targetNumber) {
             System.out.println(currentPlayer.getName() + " guessed the correct number!");
             result = true;
+        } else if (guess < targetNumber) {
+            System.out.println(currentPlayer.getName() + "'s guess is too low.↘️");
+        } else {
+            System.out.println(currentPlayer.getName() + "'s guess is too high.↗️");
         }
         System.out.println("----------------------------------------------");
         return result;
     }
 
-    private void displayWinner() {
+
+    public void displayWinner() {
         System.out.println(currentPlayer.getName() + " 🎉 is the winner! 😁");
         String guessesAsString = Arrays.stream(currentPlayer.getGuesses())
                 .mapToObj(String::valueOf)
                 .collect(Collectors.joining(", "));
         System.out.println("Guesses: " + guessesAsString);
     }
-
 }
