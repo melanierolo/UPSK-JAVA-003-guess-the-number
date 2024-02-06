@@ -1,28 +1,33 @@
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.io.InputStream;
-import java.io.ByteArrayInputStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 public class GuessTheNumberGameTest {
 
     private GuessTheNumberGame game;
 
+    @Mock
+    private Player player;
+
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.initMocks(this);
         game = new GuessTheNumberGame();
 
         // Mock a player
-        Player currentPlayer = mock(Player.class);
-        when(currentPlayer.getName()).thenReturn("Elena");
-        game.currentPlayer = currentPlayer; // Assign currentPlayer directly
+        when(player.getName()).thenReturn("Elena");
+        game.currentPlayer = player;
+        game.otherPlayer = mock(Player.class);
     }
 
     @Test
@@ -58,14 +63,38 @@ public class GuessTheNumberGameTest {
 
     @Test
     void testCheckGuess() {
-        // Create a mock player
-        Player player = new Player("Elena") {
-            @Override
-            public int makeGuess() {
-                return game.getTargetNumber(); // Mock guess is the target number
-            }
-        };
-        assertTrue(game.checkGuess(player));
+        // Arrange
+        // Stub the makeGuess() method of the player to return the target number
+        when(player.makeGuess()).thenReturn(game.getTargetNumber());
+
+        // Act and Assert
+        assertTrue(game.checkGuess(player)); // Expecting the guess to be correct
+    }
+
+    @Test
+    void testCheckGuessHigh() {
+        // Arrange
+        int targetNumber = 42; // Choose a specific target number for the test
+        game.targetNumber = targetNumber; // Set the target number in the game
+
+        // Stub the makeGuess() method of the player to return a guess higher than the target number
+        when(player.makeGuess()).thenReturn(targetNumber + 10);
+
+        // Act and Assert
+        assertFalse(game.checkGuess(player)); // Check if the guess is too high
+    }
+
+    @Test
+    void testCheckGuessLow() {
+        // Arrange
+        int targetNumber = 42; // Choose a specific target number for the test
+        game.targetNumber = targetNumber; // Set the target number in the game
+
+        // Stub the makeGuess() method of the player to return a guess lower than the target number
+        when(player.makeGuess()).thenReturn(targetNumber - 10);
+
+        // Act and Assert
+        assertFalse(game.checkGuess(player)); // Check if the guess is too low
     }
 
     // @AfterEach method to clean up after each test
