@@ -21,6 +21,24 @@ public class GuessTheNumberGame {
         return targetNumber;
     }
 
+    // Getter methods for lowerBound and upperBound
+    public int getLowerBound() {
+        return lowerBound;
+    }
+
+    public int getUpperBound() {
+        return upperBound;
+    }
+
+    // Setter methods for lowerBound and upperBound
+    public void setLowerBound(int lowerBound) {
+        this.lowerBound = lowerBound;
+    }
+
+    public void setUpperBound(int upperBound) {
+        this.upperBound = upperBound;
+    }
+
     public void play() {
         System.out.println("**************************************");
         System.out.println("🎮 Welcome to Guess The Number Game! 🎮");
